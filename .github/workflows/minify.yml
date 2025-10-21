@@ -1,0 +1,45 @@
+name: Minify JavaScript
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'htmask.js'
+
+jobs:
+  minify:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install terser
+        run: npm install -g terser
+      
+      - name: Minify JavaScript files
+        run: |
+          # Minify and create .min.js version
+          terser htmask.js -o htmask.min.js -c -m
+          echo "Minified: htmask.js -> htmask.min.js"
+      
+      - name: Commit minified files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add "*.min.js"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-minify JavaScript files"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
