@@ -1,36 +1,32 @@
 function mask(value, maskPattern) {
+  if (!value || !maskPattern) return
+
   const pureValue = value.replace(/[^a-zA-Z0-9]/g, '')
   let masked = ''
-  let digitIndex = 0
+  let valueIdx = 0
 
-  const isDigit = (c) => /\d/.test(c)
-  const isLetter = (c) => /[a-zA-Z]/.test(c)
+  for (let maskChar of maskPattern) {
+    if (valueIdx >= pureValue.length) break;
 
-  const isZero = (c) => c === '0'
-  const isA = (c) => c === 'A'
+    const inputChar = pureValue[valueIdx]
 
-  for (let char of maskPattern) {
-    if (digitIndex >= pureValue.length) break;
-
-    if (!isZero(char) && !isA(char)) {
+    if (maskChar !== '0' && maskChar !== 'A') {
       masked += char
       continue
     }
 
-    if (isZero(char) && !isDigit(pureValue[digitIndex])) break;
-    if (isA(char) && !isLetter(pureValue[digitIndex])) break;
+    if (maskChar === '0' && !/\d/.test(inputChar)) break;
+    if (maskChar === 'A' && !/[a-zA-Z]/.test(inputChar)) break;
 
-    masked += pureValue[digitIndex++]
+    masked += pureValue[valueIdx++]
   }
 
   return masked
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('input').forEach(input => {
+  document.querySelectorAll('input[mask]').forEach(input => {
     const inputMask = input.getAttribute('mask')
-    if (inputMask === null) return
-
     input.maxLength = inputMask.length
 
     input.addEventListener('input', (i) => {
