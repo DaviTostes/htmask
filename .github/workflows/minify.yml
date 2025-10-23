@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'htmask.js'
+  workflow-dispatch:
 
 jobs:
   minify:
