@@ -1,22 +1,33 @@
 # htmask.js: Because Your Input Fields Need a Disguise
 
-## What is this thing?
+`htmask.js` is a lightweight, zero-dependency JavaScript library for creating input masks. It's perfect for guiding users to enter data in a specific format, like phone numbers, dates, or secret agent codes.
 
-`htmask.js` is a lightweight, no-dependency JavaScript library for masking input fields. It's perfect for when you want to force your users to enter data in a specific format, like a phone number, a date, or a secret agent code. Or maybe you just like the look of masked inputs. We don't judge.
+## Features
 
-## How to use this marvel of modern engineering
+*   **Lightweight and Dependency-Free:** No jQuery, no frameworks, just pure vanilla JavaScript.
+*   **Declarative:** Simply add a `mask` attribute to your input fields.
+*   **Automatic Formatting:** Formats user input on the fly.
+*   **Handles Pasting:** Pasted content is also formatted correctly.
+*   **Auto-Advancing Cursor:** Automatically skips over literal characters in the mask for a smoother user experience.
 
-1.  **Include it:** Add `htmask.js` (or `htmask.min.js` if you're into that whole "optimization" thing) to your HTML file.
+## How to Use
+
+1.  **Include the script:**
 
     ```html
     <script src="htmask.js"></script>
     ```
+    Or for the minified version:
+    ```html
+    <script src="htmask.min.js"></script>
+    ```
 
-2.  **Apply the mask:** Add a `mask` attribute to any `<input>` element you want to mask. The value of the attribute is the pattern the input should follow.
+2.  **Add the `mask` attribute:**
 
-    -   `0`: Represents a digit (0-9).
-    -   `A`: Represents a letter (a-z, A-Z).
-    -   Any other character is a literal.
+    Add a `mask` attribute to any `<input>` element. The value of the attribute is the pattern the input should follow.
+
+    *   `0`: Represents a digit (0-9).
+    *   `A`: Represents a letter (a-z, A-Z).
 
     ```html
     <!-- Phone Number -->
@@ -29,10 +40,22 @@
     <input type="text" mask="AAA-0000">
     ```
 
-3.  **Watch the magic happen:** As the user types, `htmask.js` will automatically format the input to match your mask. It's so simple, even a developer could do it.
+## `mask-auto-advance`
 
-## Why would you use this?
+For an even smoother experience, you can add the `mask-auto-advance` attribute. When set to `true`, the cursor will automatically insert and jump over the mask's separators as the user types.
 
-Because unformatted input is a crime against humanity. And because it's fun to watch the input change as you type. It's the little things in life, you know?
+```html
+<input type="text" mask="0000-00-00" mask-auto-advance="true">
+```
+
+**Example without `mask-auto-advance`:**
+User types `2025` -> `2025`
+
+**Example with `mask-auto-advance`:**
+User types `2025` -> `2025-`
+
+## Why use htmask.js?
+
+Because unformatted input is a pain. `htmask.js` is a simple, no-fuss way to make your forms more user-friendly. It's the little things in life, you know?
 
 So go ahead, give your input fields the masks they deserve. They'll thank you for it. Probably.
