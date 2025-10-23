@@ -1,5 +1,5 @@
 function mask(value, maskPattern) {
-  if (!value || !maskPattern) return
+  if (!value || !maskPattern) return ""
 
   const pureValue = value.replace(/[^a-zA-Z0-9]/g, '')
   let masked = ''
@@ -11,7 +11,7 @@ function mask(value, maskPattern) {
     const inputChar = pureValue[valueIdx]
 
     if (maskChar !== '0' && maskChar !== 'A') {
-      masked += char
+      masked += maskChar
       continue
     }
 
@@ -26,11 +26,28 @@ function mask(value, maskPattern) {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('input[mask]').forEach(input => {
-    const inputMask = input.getAttribute('mask')
-    input.maxLength = inputMask.length
+    const maskPattern = input.getAttribute('mask')
+    input.maxLength = maskPattern.length
 
-    input.addEventListener('input', (i) => {
-      i.target.value = mask(i.target.value, inputMask)
-    })
+    const applyMask = (event) => {
+      let cursorPos = event.target.selectionStart
+
+      const maskedValue = mask(event.target.value, maskPattern)
+      event.target.value = maskedValue
+
+      let inCursorPos = maskedValue[cursorPos - 1]
+
+      if (event.data && maskedValue.length >= cursorPos) {
+        while (!/\d/.test(inCursorPos) && !/[a-zA-Z]/.test(inCursorPos)) {
+          cursorPos++
+          inCursorPos = maskedValue[cursorPos - 1]
+        }
+      }
+
+      event.target.setSelectionRange(cursorPos, cursorPos)
+    }
+
+    input.addEventListener("input", applyMask)
+    input.addEventListener("paste", applyMask)
   })
 })
